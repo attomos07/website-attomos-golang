@@ -146,6 +146,92 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="businessType" class="form-label">Giro de Negocio</label>
+                            <div class="input-container">
+                                <i class="lni lni-store input-icon"></i>
+                                <div class="custom-select-wrapper">
+                                    <input type="text" 
+                                           id="businessType" 
+                                           name="businessType" 
+                                           class="form-input form-select" 
+                                           placeholder="Selecciona tu giro de negocio" 
+                                           readonly
+                                           required>
+                                    <i class="lni lni-chevron-down select-arrow"></i>
+                                    <div class="select-dropdown" id="businessDropdown">
+                                        <div class="select-search-container">
+                                            <i class="lni lni-search-alt search-icon"></i>
+                                            <input type="text" 
+                                                   class="select-search" 
+                                                   id="businessSearch"
+                                                   placeholder="Buscar giro de negocio..."
+                                                   autocomplete="off">
+                                        </div>
+                                        <div class="select-options-container" id="selectOptionsContainer">
+                                            <div class="select-option" data-value="clinica-dental" data-keywords="clinica dental odontologia dientes">
+                                                <i class="lni lni-hospital"></i>
+                                                <span>Clínica Dental</span>
+                                            </div>
+                                            <div class="select-option" data-value="peluqueria" data-keywords="peluqueria salon belleza corte cabello">
+                                                <i class="lni lni-cut"></i>
+                                                <span>Peluquería / Salón de Belleza</span>
+                                            </div>
+                                            <div class="select-option" data-value="restaurante" data-keywords="restaurante comida alimentos">
+                                                <i class="lni lni-restaurant"></i>
+                                                <span>Restaurante</span>
+                                            </div>
+                                            <div class="select-option" data-value="pizzeria" data-keywords="pizzeria pizza comida italiana">
+                                                <i class="lni lni-pizza"></i>
+                                                <span>Pizzería</span>
+                                            </div>
+                                            <div class="select-option" data-value="escuela" data-keywords="escuela educacion academia colegio">
+                                                <i class="lni lni-graduation"></i>
+                                                <span>Escuela / Educación</span>
+                                            </div>
+                                            <div class="select-option" data-value="gym" data-keywords="gimnasio gym fitness ejercicio deporte">
+                                                <i class="lni lni-dumbbell"></i>
+                                                <span>Gimnasio / Fitness</span>
+                                            </div>
+                                            <div class="select-option" data-value="spa" data-keywords="spa wellness bienestar masajes relajacion">
+                                                <i class="lni lni-leaf"></i>
+                                                <span>Spa / Wellness</span>
+                                            </div>
+                                            <div class="select-option" data-value="consultorio" data-keywords="consultorio medico doctor salud clinica">
+                                                <i class="lni lni-heart-monitor"></i>
+                                                <span>Consultorio Médico</span>
+                                            </div>
+                                            <div class="select-option" data-value="veterinaria" data-keywords="veterinaria animales mascotas perros gatos">
+                                                <i class="lni lni-bug"></i>
+                                                <span>Veterinaria</span>
+                                            </div>
+                                            <div class="select-option" data-value="hotel" data-keywords="hotel hospedaje alojamiento turismo">
+                                                <i class="lni lni-home"></i>
+                                                <span>Hotel / Hospedaje</span>
+                                            </div>
+                                            <div class="select-option" data-value="tienda" data-keywords="tienda retail comercio ventas">
+                                                <i class="lni lni-cart"></i>
+                                                <span>Tienda / Retail</span>
+                                            </div>
+                                            <div class="select-option" data-value="agencia" data-keywords="agencia servicios consultorias">
+                                                <i class="lni lni-briefcase"></i>
+                                                <span>Agencia / Servicios</span>
+                                            </div>
+                                            <div class="select-option" data-value="otro" data-keywords="otro diferente">
+                                                <i class="lni lni-more"></i>
+                                                <span>Otro</span>
+                                            </div>
+                                        </div>
+                                        <div class="select-no-results" id="selectNoResults" style="display: none;">
+                                            <i class="lni lni-emoji-sad"></i>
+                                            <p>No se encontraron resultados</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-error" id="businessTypeError"></div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="password" class="form-label">Contraseña</label>
                             <div class="input-container">
                                 <i class="lni lni-lock input-icon"></i>
