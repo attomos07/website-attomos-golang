@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initRegisterForm();
     initSocialRegister();
     initAutoFormat();
+    initCustomSelect();
     
     console.log('✅ Register funcionalidades inicializadas');
 });
@@ -87,6 +88,13 @@ function validateRegisterField(field) {
                 isValid = false;
             } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value)) {
                 errorMessage = 'Debe contener mayúsculas, minúsculas y números';
+                isValid = false;
+            }
+            break;
+
+        case 'businessType':
+            if (!value) {
+                errorMessage = 'Selecciona el giro de tu negocio';
                 isValid = false;
             }
             break;
@@ -212,7 +220,7 @@ function handleRegisterSubmit(e) {
     
     // Validar todos los campos requeridos
     let isValid = true;
-    const requiredFields = ['firstName', 'lastName', 'email', 'password'];
+    const requiredFields = ['firstName', 'lastName', 'email', 'password', 'businessType'];
     
     requiredFields.forEach(fieldName => {
         const field = form.querySelector(`[name="${fieldName}"]`);
@@ -343,6 +351,180 @@ function registerWithFacebook() {
     setTimeout(() => {
         showNotification('Funcionalidad en desarrollo', 'warning');
     }, 1000);
+}
+
+// ============================================
+// CUSTOM SELECT DROPDOWN CON ANIMACIÓN CASCADA
+// ============================================
+
+function initCustomSelect() {
+    const selectWrapper = document.querySelector('.custom-select-wrapper');
+    const selectInput = document.getElementById('businessType');
+    const dropdown = document.getElementById('businessDropdown');
+    const searchInput = document.getElementById('businessSearch');
+    const optionsContainer = document.getElementById('selectOptionsContainer');
+    const options = optionsContainer.querySelectorAll('.select-option');
+    const noResults = document.getElementById('selectNoResults');
+    
+    if (!selectWrapper || !selectInput || !dropdown) {
+        console.warn('⚠️ Custom select elements no encontrados');
+        return;
+    }
+
+    // Toggle dropdown al hacer click en el input
+    selectInput.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleDropdown();
+    });
+
+    // Búsqueda en tiempo real
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            filterOptions(this.value);
+        });
+
+        // Prevenir que el click en search cierre el dropdown
+        searchInput.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+
+    // Seleccionar opción
+    options.forEach(option => {
+        option.addEventListener('click', function(e) {
+            e.stopPropagation();
+            selectOption(this);
+        });
+    });
+
+    // Cerrar dropdown al hacer click fuera
+    document.addEventListener('click', function(e) {
+        if (!selectWrapper.contains(e.target)) {
+            closeDropdown();
+        }
+    });
+
+    // Cerrar con ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && selectWrapper.classList.contains('active')) {
+            closeDropdown();
+        }
+    });
+
+    function toggleDropdown() {
+        const isActive = selectWrapper.classList.contains('active');
+        
+        if (isActive) {
+            closeDropdown();
+        } else {
+            openDropdown();
+        }
+    }
+
+    function openDropdown() {
+        selectWrapper.classList.add('active');
+        selectInput.classList.add('active');
+        
+        // Focus en el search input
+        if (searchInput) {
+            setTimeout(() => {
+                searchInput.focus();
+            }, 100);
+        }
+
+        // Resetear búsqueda y mostrar todas las opciones
+        if (searchInput) {
+            searchInput.value = '';
+        }
+        filterOptions('');
+        
+        // Resetear animaciones de cascada
+        const visibleOptions = optionsContainer.querySelectorAll('.select-option:not(.hidden)');
+        visibleOptions.forEach((option, index) => {
+            option.style.animation = 'none';
+            setTimeout(() => {
+                option.style.animation = '';
+            }, 10);
+        });
+
+        // Track evento
+        trackRegisterEvent('business_type_dropdown_opened');
+    }
+
+    function closeDropdown() {
+        selectWrapper.classList.remove('active');
+        selectInput.classList.remove('active');
+        
+        // Limpiar búsqueda
+        if (searchInput) {
+            searchInput.value = '';
+        }
+    }
+
+    function filterOptions(searchTerm) {
+        const term = searchTerm.toLowerCase().trim();
+        let visibleCount = 0;
+
+        options.forEach(option => {
+            const text = option.querySelector('span').textContent.toLowerCase();
+            const keywords = option.getAttribute('data-keywords') || '';
+            const searchableText = text + ' ' + keywords.toLowerCase();
+            
+            if (searchableText.includes(term)) {
+                option.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                option.classList.add('hidden');
+            }
+        });
+
+        // Mostrar/ocultar mensaje de "no results"
+        if (noResults) {
+            if (visibleCount === 0 && term !== '') {
+                noResults.style.display = 'block';
+                optionsContainer.style.display = 'none';
+            } else {
+                noResults.style.display = 'none';
+                optionsContainer.style.display = 'block';
+            }
+        }
+
+        // Re-aplicar animación cascada a opciones visibles
+        const visibleOptions = optionsContainer.querySelectorAll('.select-option:not(.hidden)');
+        visibleOptions.forEach((option, index) => {
+            option.style.animationDelay = `${index * 0.05}s`;
+        });
+    }
+
+    function selectOption(option) {
+        const value = option.getAttribute('data-value');
+        const text = option.querySelector('span').textContent;
+
+        // Actualizar input
+        selectInput.value = text;
+        selectInput.setAttribute('data-value', value);
+
+        // Marcar opción seleccionada
+        options.forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+
+        // Validar campo
+        clearFieldError(selectInput);
+        showFieldSuccess(selectInput);
+
+        // Cerrar dropdown
+        closeDropdown();
+
+        // Track selección
+        trackRegisterEvent('business_type_selected', {
+            business_type: value,
+            business_name: text
+        });
+
+        console.log(`✅ Giro seleccionado: ${text} (${value})`);
+    }
+
+    console.log('🎯 Custom select con búsqueda inicializado');
 }
 
 // ============================================
